@@ -11,7 +11,7 @@ app = Flask(__name__,static_folder='.',static_url_path='')
 CORS(app)
 # protocolの読み込み
 protocols=[]
-with open('api/fixed_protocols/ion/S1720001.csv') as f:
+with open('app/api/fixed_protocols/ion/S1720001.csv') as f:
     reader = csv.reader(f)
     for row in reader:
         protocols.append(row)
@@ -66,8 +66,8 @@ def search():
 def audio():
     fs = request.files['file']
     print('test:',fs)
-    fs.save('api/audio/sample.mp3') # 中間ファイルを作らないようにする
-    result = model.transcribe("api/audio/sample.mp3",fp16=False)
+    fs.save('app/api/audio/sample.mp3') # 中間ファイルを作らないようにする
+    result = model.transcribe("app/api/audio/sample.mp3",fp16=False)
     print(result['text'])
     start_time = callculate_similarity(result['text'])
     return jsonify({'time': start_time})
