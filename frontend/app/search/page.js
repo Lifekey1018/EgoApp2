@@ -52,6 +52,7 @@ export default function Search() {
             if (response.ok) {
                 const data = await response.json();
                 setSearchTime(data.time);
+                console.log(data.time)
                 videoRef.current.currentTime = data.time;
                 videoRef.current.play();
             } else {

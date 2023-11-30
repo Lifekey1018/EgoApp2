@@ -11,7 +11,7 @@ app = Flask(__name__,static_folder='.',static_url_path='')
 CORS(app)
 # protocolの読み込み
 protocols=[]
-with open('fixed_protocols/ion/S1720001.csv') as f:
+with open('api/fixed_protocols/ion/S1720001.csv') as f:
     reader = csv.reader(f)
     for row in reader:
         protocols.append(row)
@@ -47,7 +47,7 @@ def callculate_similarity(s):
         if similarity < doc.similarity(search):
             similarity = doc.similarity(search)
             tmp=i
-    return jsonify(protocols[tmp][2])
+    return protocols[tmp][2]
 
 #* 初期画面, 実験動画の選択
 @app.route('/api/index', methods=["POST", "GET"])
@@ -66,8 +66,8 @@ def search():
 def audio():
     fs = request.files['file']
     print('test:',fs)
-    fs.save('audio/sample.mp3') # 中間ファイルを作らないようにする
-    result = model.transcribe("audio/sample.mp3",fp16=False)
+    fs.save('api/audio/sample.mp3') # 中間ファイルを作らないようにする
+    result = model.transcribe("api/audio/sample.mp3",fp16=False)
     print(result['text'])
     start_time = callculate_similarity(result['text'])
     return jsonify({'time': start_time})
