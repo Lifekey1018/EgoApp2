@@ -2,9 +2,6 @@ import numpy as np
 import csv
 import spacy
 import whisper
-import functools
-import time
-from queue import Queue
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 app = Flask(__name__,static_folder='.',static_url_path='')
@@ -15,27 +12,9 @@ with open('api/fixed_protocols/ion/S1720001.csv') as f:
     reader = csv.reader(f)
     for row in reader:
         protocols.append(row)
-
 # spacyの宣言
 nlp = spacy.load('ja_ginza')
 model = whisper.load_model("base")
-
-singleQueue = Queue(maxsize=1)
-def multiple_control(q):
-    def _multiple_control(func):
-        @functools.wraps(func)
-        def wrapper(*args,**kwargs):
-            q.put(time.time())
-            print("/// [start] critial zone")
-            result = func(*args,**kwargs)
-            print("/// [end] critial zone")
-            q.get()
-            q.task_done()
-            return result
-
-        return wrapper
-    return _multiple_control
-
 #* テキストとプロトコルの類似度計算
 def callculate_similarity(s):
     search = nlp(s)
@@ -48,7 +27,6 @@ def callculate_similarity(s):
             similarity = doc.similarity(search)
             tmp=i
     return protocols[tmp][2]
-
 #* 初期画面, 実験動画の選択
 @app.route('/api/index', methods=["POST", "GET"])
 def index():
@@ -74,5 +52,3 @@ def audio():
 
 if __name__ == "__main__":
     app.run(port=3000,debug=True)
-    
-
