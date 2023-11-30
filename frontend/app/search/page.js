@@ -22,7 +22,7 @@ export default function Search() {
         ['','','','']]);
 
     useLayoutEffect(() => {
-        fetch('http://127.0.0.1:3000/')
+        fetch("/api/index")
         .then((res) => res.json())
         .then((data) => setProtocol(data));
     },[]);
@@ -41,7 +41,7 @@ export default function Search() {
         e.preventDefault();
     
         try {    
-            const response = await fetch('http://127.0.0.1:3000/search/text', {
+            const response = await fetch('/api/text', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export default function Search() {
                 if (audioFile) {
                     const formData = new FormData()
                     formData.append('file', audioFile)
-                    const response = await fetch('http://127.0.0.1:3000/audio', {
+                    const response = await fetch('/api/audio', {
                         method: 'POST',
                         body: formData,
                     })

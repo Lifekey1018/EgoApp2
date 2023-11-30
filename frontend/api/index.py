@@ -47,22 +47,22 @@ def callculate_similarity(s):
         if similarity < doc.similarity(search):
             similarity = doc.similarity(search)
             tmp=i
-    return protocols[tmp][2]
+    return jsonify(protocols[tmp][2])
 
 #* 初期画面, 実験動画の選択
-@app.route('/', methods=["POST", "GET"])
+@app.route('/api/index', methods=["POST", "GET"])
 def index():
     return protocols
 
 #* 各実験動画検索画面の表示
-@app.route('/search/text', methods=["POST", "GET"])
+@app.route('/api/text', methods=["POST", "GET"])
 def search():
     data = request.json
     s = data.get('search')
     start_time = callculate_similarity(s) 
     return jsonify({'time' : start_time})
 
-@app.route('/audio', methods=['POST'])
+@app.route('/api/audio', methods=['POST'])
 def audio():
     fs = request.files['file']
     print('test:',fs)

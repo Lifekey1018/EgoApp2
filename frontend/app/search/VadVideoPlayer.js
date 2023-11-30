@@ -27,7 +27,7 @@ export const VadVideoPlayer = ({videoRef}) => {
               if (audioFile) {
                   const formData = new FormData()
                   formData.append('file', audioFile)
-                  const response = await fetch('http://127.0.0.1:3000/audio', {
+                  const response = await fetch('/api/audio', {
                       method: 'POST',
                       body: formData,
                   })
